@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Astronomy Picture of the Day</title>
+  <style>
+    /* Add your CSS styling here */
+  </style>
+</head>
+<body>
+  <form id="date-form">
+    <label for="apod-date">Select a date (yyyy/mm/dd):</label>
+    <input type="date" id="apod-date" required>
+    <button type="submit">Fetch APOD</button>
+  </form>
+
+  <div id="apod-container" style="display: none;">
+    <h1 id="apod-title"></h1>
+    <img id="apod-image" src="" alt="Astronomy Picture of the Day">
+    <h3> Nebula x ray image </h3>
+    <p id="apod-explanation"></p>
+    <p id="apod-date-display"></p>
+  </div>
+
+  <script>
+    document.getElementById('date-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const selectedDate = formatDate(document.getElementById('apod-date').value);
+      fetchAPOD(selectedDate);
+    });
+      
+    fetchAPOD();
+    function fetchAPOD(date) {
+      const API_KEY = '3PBIFqPp8e5L8NKaeQY0PoVGd2Tg3NgZh0d3Njov';
+      const apiUrl = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${date} `;
+
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          // Display the APOD information on the webpage
+          const apodContainer = document.getElementById('apod-container');
+          const titleElement = document.getElementById('apod-title');
+          const imageElement = document.getElementById('apod-image');
+          const explanationElement = document.getElementById('apod-explanation');
+          const dateDisplayElement = document.getElementById('apod-date-display');
+
+          titleElement.textContent = data.title;
+          imageElement.src = data.url;
+          explanationElement.textContent = data.explanation;
+          dateDisplayElement.textContent = `Date: ${data.date}`;
+
+          // Show the APOD container after fetching the data
+          apodContainer.style.display = 'block';
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
+    // Function to format the date to yyyy/mm/dd
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const year = date.getFullYear().toString();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+  </script>
+</body>
+</html>

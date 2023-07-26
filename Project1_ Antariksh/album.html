@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Astronomy Picture of the Day</title>
+  <style>
+    /* Add your CSS styling here */
+  </style>
+</head>
+<body>
+  <div id="apod-container">
+    <p id = "apod-id"></p>
+    <h1 id="apod-title"></h1>
+    <img id="apod-image" src="" alt="Astronomy Picture of the Day">
+      <p id = "apod-id"></p>
+    <p id="apod-explanation"></p>
+    <p id="apod-date"></p>
+
+    <p id = "apod-id"></p>
+  </div>
+
+  <script>
+    // Fetch data from NASA's APOD API
+    const API_KEY = '3PBIFqPp8e5L8NKaeQY0PoVGd2Tg3NgZh0d3Njov';
+    const apiUrl = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=&hd=true&concept_tags=true`;
+    const fullreq = "https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=today&hd=true&concept_tags=true";
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+      //  Extract relevant information from the API response
+        const imageContainer = document.getElementById('apod-container');
+        const titleElement = document.getElementById('apod-title');
+        const imageElement = document.getElementById('apod-image');
+        const explanationElement = document.getElementById('apod-explanation');
+        const dateElement = document.getElementById('apod-date');
+
+        const service_version = document.getElementById("apod-id");
+
+        titleElement.textContent = data.title;
+        imageElement.src = data.url;
+        explanationElement.textContent = data.explanation;
+        dateElement.textContent = data.date;
+
+        service_version.textContent = data.service_version;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NASA Image and Video Library</title>
+  <style>
+    /* Add your CSS styling here */
+  </style>
+</head>
+<body>
+  <div id="media-gallery"></div>
+
+  <script>
+    // Fetch data from NASA's Image and Video Library API
+    const API_KEY = '3PBIFqPp8e5L8NKaeQY0PoVGd2Tg3NgZh0d3Njov';
+    const apiUrl = `https://images-api.nasa.gov/search?q=apollo%2011..."`;
+
+    fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {
+    // Extract media items from the API response using optional chaining
+    const mediaItems = data?.collection?.items || [];
+
+    // Display the media items
+    const mediaGallery = document.getElementById('media-gallery');
+    mediaItems.forEach(item => {
+      const mediaType = item.data[0].media_type;
+      const mediaUrl = mediaType === 'image' ? item.links[0].href : item.href;
+
+      if (mediaType === 'image') {
+        const imageElement = document.createElement('img');
+        imageElement.src = mediaUrl;
+        mediaGallery.appendChild(imageElement);
+      } else if (mediaType === 'video') {
+        const videoElement = document.createElement('video');
+        videoElement.src = mediaUrl;
+        videoElement.controls = true;
+        mediaGallery.appendChild(videoElement);
+      }
+    });
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+
+  </script>
+</body>
+</html>
